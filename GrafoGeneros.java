@@ -26,18 +26,17 @@ public class GrafoGeneros {
         generos.remove(nombre);
     }
 
+    //Se implementa existe arco con una modificacion, donde retorna (en caso de existir) la posicion del elemento.
     public void agregarArco(String nombreOrigen, String nombreDestino) {
-        if(generos.containsKey(nombreOrigen) && generos.containsKey(nombreDestino))
-            generos.get(nombreOrigen).add(new Genero(nombreOrigen,1));
-    }
-
-    public void borrarArco(String nombreOrigen, String nombreDestino) {
-        if(generos.containsKey(nombreOrigen)){
-            for(int i =0; i < generos.get(nombreOrigen).size(); i++){
-                if(generos.get(nombreOrigen).get(i).getNombre() == nombreDestino)
-                    generos.get(nombreOrigen).remove(i);
+        int indice = 0;
+        //if(generos.containsKey(nombreOrigen) && generos.containsKey(nombreDestino)){
+            indice= existeArco(nombreOrigen,nombreDestino);
+            if (indice != -1){
+                generos.get(nombreOrigen).get(indice).setValorBusqueda();
+            }else{
+                generos.get(nombreOrigen).add(new Genero(nombreDestino,1));
             }
-        }
+      //  }
     }
 
     public boolean contieneVertice(String nombre) {
@@ -46,14 +45,14 @@ public class GrafoGeneros {
         else return false;
     }
 
-    public boolean existeArco(String nombreOrigen, String nombreDestino) {
+    public int existeArco(String nombreOrigen, String nombreDestino) {
         if ((!generos.isEmpty()) && (generos.containsKey(nombreOrigen))) {
             for (int i = 0; i < generos.get(nombreOrigen).size(); i++) {
                 if (generos.get(nombreOrigen).get(i).getNombre() == nombreDestino)
-                    return true;
+                    return i;
             }
-            return false;
-        } else return false;
+            return -1;
+        } else return -1;
     }
 
     public int cantidadVertices() {
@@ -101,4 +100,15 @@ public class GrafoGeneros {
 //        return it;
 //    }
 
+
+    @Override
+    public String toString() {
+        String item="";
+        for(String e : generos.keySet()){
+          item += e;
+          item += generos.get(e).toString();
+          item += " // ";
+        }
+        return item;
+    }
 }

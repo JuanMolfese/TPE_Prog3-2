@@ -19,8 +19,8 @@ public class Genero {
         return valorBusqueda;
     }
 
-    public void setValorBusqueda(Integer valorBusqueda) {
-        this.valorBusqueda = valorBusqueda;
+    public void setValorBusqueda() {
+        this.valorBusqueda = valorBusqueda + 1;
     }
 
 
