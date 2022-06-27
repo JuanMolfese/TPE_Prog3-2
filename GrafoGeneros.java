@@ -46,9 +46,9 @@ public class GrafoGeneros {
     }
 
     public int existeArco(String nombreOrigen, String nombreDestino) {
-        if ((!generos.isEmpty()) && (generos.containsKey(nombreOrigen))) {
-            for (int i = 0; i < generos.get(nombreOrigen).size(); i++) {
-                if (generos.get(nombreOrigen).get(i).getNombre() == nombreDestino)
+        if ((!this.generos.isEmpty()) && (this.generos.containsKey(nombreOrigen))) {
+            for (int i = 0; i < this.generos.get(nombreOrigen).size(); i++) {
+                if (this.generos.get(nombreOrigen).get(i).getNombre().equals(nombreDestino))
                     return i;
             }
             return -1;
@@ -56,7 +56,7 @@ public class GrafoGeneros {
     }
 
     public int cantidadVertices() {
-        return generos.size();
+        return this.generos.size();
     }
 
     public int cantidadArcos() {
@@ -72,13 +72,21 @@ public class GrafoGeneros {
         return it;
     }
 
-    public Iterator<String> obtenerAdyacentes(String nombre) {
-        ArrayList<String>lista_ady = new ArrayList<>();
+    public Iterator<Genero> itobtenerAdyacentes(String nombre) {
+        ArrayList<Genero>lista_ady = new ArrayList<>();
         for (int i = 0; i < generos.get(nombre).size(); i++) {
-            lista_ady.add(generos.get(nombre).get(i).getNombre());
+            lista_ady.add(generos.get(nombre).get(i));
         }
-        Iterator<String> it = lista_ady.iterator();
+        Iterator<Genero> it = lista_ady.iterator();
         return it;
+    }
+
+    public ArrayList<Genero> obtenerAdyacentes(String nombre) {
+        ArrayList<Genero>lista_ady = new ArrayList<>();
+        for (int i = 0; i < this.generos.get(nombre).size(); i++) {
+            lista_ady.add(this.generos.get(nombre).get(i));
+        }
+        return lista_ady;
     }
 
 //   public Iterator<Arco<T>> obtenerArcos() {

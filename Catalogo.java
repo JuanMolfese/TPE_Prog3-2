@@ -1,22 +1,25 @@
 import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 public class Catalogo {
 
-    private GrafoGeneros generos;
+    private GrafoGeneros grafo_generos;
 
     public Catalogo(){
-        this.generos = new GrafoGeneros();
+        this.grafo_generos = new GrafoGeneros();
     }
 
-      /**
+     /**
      * Genera un grafo de generos extraidos de un archivo
      * .csv donde cada vertice tiene el nombre del genero y
      * una referencia a la lista de los generos que fueron buscados
      * luego de este vertice. Ademas contiene la cantidad de busquedas
      * repetidas.
      * */
+
     public void obtenerDatos(){
 
         String csvFile = "dataset2/dataset1.csv";
@@ -33,9 +36,9 @@ public class Catalogo {
                 String[] items = line.split(cvsSplitBy);
 
                 for(int i=0; i< items.length;i++){
-                    generos.addVertice(items[i]);
+                    grafo_generos.addVertice(items[i]);
                     if(i+1 < items.length)
-                        generos.agregarArco(items[i], items[i+1]);
+                        grafo_generos.agregarArco(items[i], items[i+1]);
                 }
             }
         } catch (
@@ -78,8 +81,25 @@ public class Catalogo {
         }
     }
 
+    public ArrayList<String> getMasBuscado(String genero, int cant){
+        ArrayList<Genero> tmp = new ArrayList<>();
+        ArrayList<String> respuesta = new ArrayList<>();
+        tmp = this.grafo_generos.obtenerAdyacentes(genero);
+        Collections.sort(tmp);
+
+        for (int i = 0; i< cant; i++){
+            if(tmp.size()>i) {
+                respuesta.add(tmp.get(i).getNombre());
+            }else{
+                return respuesta;
+            }
+        }
+        return respuesta;
+    }
+
+
     @Override
     public String toString() {
-        return generos.toString();
+        return grafo_generos.toString();
     }
 }

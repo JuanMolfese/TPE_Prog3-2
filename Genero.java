@@ -1,4 +1,5 @@
-public class Genero {
+
+public class Genero implements Comparable<Genero> {
     private String nombre;
     private Integer valorBusqueda;
 
@@ -24,4 +25,8 @@ public class Genero {
     }
 
 
+    @Override
+    public int compareTo(Genero g) {
+        return g.valorBusqueda.compareTo(this.valorBusqueda);
+    }
 }
