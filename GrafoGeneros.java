@@ -119,7 +119,7 @@ public class GrafoGeneros {
     }
 
     public void caminoMayorPeso(Genero genero, ArrayList<Genero> caminoParcial, ArrayList<Genero> caminoMayor) {
-        if (this.generos.get(genero.getNombre()).isEmpty()){ //falta agregarle: O todos los adyacentes ya estan en el camino parcial
+        if (this.generos.get(genero.getNombre()).isEmpty() || notNewAyacente(genero, caminoParcial)){ //no tiene adtaventes o todos los adyacentes ya estan en el camino parcial
             if (getPeso(caminoParcial) > getPeso(caminoMayor)){
                 caminoMayor.clear();
                 caminoMayor.addAll(caminoParcial);
@@ -144,6 +144,14 @@ public class GrafoGeneros {
         return size;
     }
 
+    private boolean notNewAyacente (Genero genero, ArrayList<Genero> camino){
+        for (Genero g: this.generos.get(genero)) {
+            if (!camino.contains(g)){
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 //   public Iterator<Arco<T>> obtenerArcos() {
