@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -89,6 +90,7 @@ public class GrafoGeneros {
         return lista_ady;
     }
 
+
     //TODO
     public GrafoGeneros buscarCiclos(String generos) {
         GrafoGeneros respuesta = new GrafoGeneros();
@@ -100,7 +102,46 @@ public class GrafoGeneros {
             //Si esta mas veces en el archivo ... seguir recorriendo buscando mas ciclos,
             //donde en genero es el incio y fin ???
         }else{
-        return respuesta;
+            return respuesta;
+        }
+    }
+
+    public ArrayList<Genero> caminoMayorPeso(String genero){
+        ArrayList<Genero> caminoMayor = new ArrayList<>();
+        ArrayList<Genero> caminoParcial = new ArrayList<>();
+        if (this.generos.containsKey(genero)) {
+            Genero origen = new Genero(genero, 0);
+            caminoParcial.add(origen);
+            caminoMayorPeso(origen, caminoParcial, caminoMayor);
+        }
+
+        return caminoMayor;
+    }
+
+    public void caminoMayorPeso(Genero genero, ArrayList<Genero> caminoParcial, ArrayList<Genero> caminoMayor) {
+        if (this.generos.get(genero.getNombre()).isEmpty()){ //falta agregarle: O todos los adyacentes ya estan en el camino parcial
+            if (getPeso(caminoParcial) > getPeso(caminoMayor)){
+                caminoMayor.clear();
+                caminoMayor.addAll(caminoParcial);
+            }
+        }
+        else {
+            for (Genero ady: this.generos.get(genero.getNombre())) {
+                if (!caminoParcial.contains(ady)) {
+                    caminoParcial.add(0, ady);
+                    caminoMayorPeso(ady, caminoParcial, caminoMayor);
+                    caminoParcial.remove(ady);
+                }
+            }
+        }
+    }
+
+    public int getPeso(ArrayList<Genero> camino){
+        int size = 0;
+        for (Genero g: camino) {
+            size += g.getValorBusqueda();
+        }
+        return size;
     }
 
 
