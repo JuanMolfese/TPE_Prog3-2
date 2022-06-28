@@ -90,7 +90,7 @@ public class GrafoGeneros {
         return lista_ady;
     }
 
-
+    /*
     //TODO
     public GrafoGeneros buscarCiclos(String generos) {
         GrafoGeneros respuesta = new GrafoGeneros();
@@ -105,53 +105,39 @@ public class GrafoGeneros {
             return respuesta;
         }
     }
-
-    public ArrayList<Genero> caminoMayorPeso(String genero){
-        ArrayList<Genero> caminoMayor = new ArrayList<>();
-        ArrayList<Genero> caminoParcial = new ArrayList<>();
-        if (this.generos.containsKey(genero)) {
-            Genero origen = new Genero(genero, 0);
-            caminoParcial.add(origen);
-            caminoMayorPeso(origen, caminoParcial, caminoMayor);
+    */
+    public ArrayList<String> caminoMayorPeso(String genero){
+        ArrayList<String> solucion = new ArrayList<>();
+        String tmp = genero;
+        solucion.clear();
+        solucion.add(tmp);
+        //while (G.Vértices – S) no es vacío: 	// loop principal
+        while (!this.generos.get(tmp).isEmpty() && notNewAyacente(tmp, solucion)) {
+            tmp = generoMayorPeso(this.generos.get(tmp)); // se queda con el genero de mayor peso
+            solucion.add(tmp);
         }
-
-        return caminoMayor;
+        return solucion;
     }
 
-    public void caminoMayorPeso(Genero genero, ArrayList<Genero> caminoParcial, ArrayList<Genero> caminoMayor) {
-        if (this.generos.get(genero.getNombre()).isEmpty() || notNewAyacente(genero, caminoParcial)){ //no tiene adtaventes o todos los adyacentes ya estan en el camino parcial
-            if (getPeso(caminoParcial) > getPeso(caminoMayor)){
-                caminoMayor.clear();
-                caminoMayor.addAll(caminoParcial);
-            }
-        }
-        else {
-            for (Genero ady: this.generos.get(genero.getNombre())) {
-                if (!caminoParcial.contains(ady)) {
-                    caminoParcial.add(0, ady);
-                    caminoMayorPeso(ady, caminoParcial, caminoMayor);
-                    caminoParcial.remove(ady);
-                }
-            }
-        }
-    }
-
-    public int getPeso(ArrayList<Genero> camino){
-        int size = 0;
-        for (Genero g: camino) {
-            size += g.getValorBusqueda();
-        }
-        return size;
-    }
-
-    private boolean notNewAyacente (Genero genero, ArrayList<Genero> camino){
+    private boolean notNewAyacente (String genero, ArrayList<String> solucion){
         for (Genero g: this.generos.get(genero)) {
-            if (!camino.contains(g)){
+            if (!solucion.contains(g.getNombre())){
                 return true;
             }
         }
         return false;
     }
+
+    private String generoMayorPeso(ArrayList<Genero> adyacentes){
+        Genero g = new Genero("tmp",0);
+        for (Genero i: adyacentes) {
+            if (g.getValorBusqueda() < i.getValorBusqueda()){
+                g = i;
+            }
+        }
+        return g.getNombre();
+    }
+
 
 
 //   public Iterator<Arco<T>> obtenerArcos() {
