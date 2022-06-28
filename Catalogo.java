@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Catalogo {
@@ -97,6 +98,22 @@ public class Catalogo {
         return respuesta;
     }
 
+    public ArrayList<String> getBuscados(String genero){
+        ArrayList<Genero> tmp = new ArrayList<>();
+        ArrayList<String> respuesta = new ArrayList<>();
+        tmp = this.grafo_generos.obtenerAdyacentes(genero);
+        for (int i = 0; i < tmp.size() ; i++){
+            respuesta.add(tmp.get(i).getNombre());
+        }
+        return respuesta;
+    }
+
+    //TODO
+    public GrafoGeneros getCicloGenero(String genero){
+       // if(this.grafo_generos.contieneCiclo()) {//Para no crear un hasmap sin antes saber si al menos hay un ciclo en el grafo
+       GrafoGeneros grafoConCiclo = new GrafoGeneros();
+       return grafoConCiclo = grafo_generos.buscarCiclos(genero);
+    }
 
     @Override
     public String toString() {

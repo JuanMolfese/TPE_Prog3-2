@@ -89,6 +89,22 @@ public class GrafoGeneros {
         return lista_ady;
     }
 
+    //TODO
+    public GrafoGeneros buscarCiclos(String generos) {
+        GrafoGeneros respuesta = new GrafoGeneros();
+
+        if(){
+            //buscar el genero en el grafo
+            //comprobar si es inicio y fin en un recorrido (ciclo)
+            //si encuentra uno lo retorno
+            //Si esta mas veces en el archivo ... seguir recorriendo buscando mas ciclos,
+            //donde en genero es el incio y fin ???
+        }else{
+        return respuesta;
+    }
+
+
+
 //   public Iterator<Arco<T>> obtenerArcos() {
 //        ArrayList<Arco<T>> lista_arcos = new ArrayList<>();
 //        for (int i : grafo.keySet()) {
