@@ -105,54 +105,23 @@ public class GrafoGeneros {
         return lista_ady;
     }
 
-    /*
-    //TODO
-    public GrafoGeneros buscarCiclos(String generos) {
-        GrafoGeneros respuesta = new GrafoGeneros();
-
-        if(){
-            //buscar el genero en el grafo
-            //comprobar si es inicio y fin en un recorrido (ciclo)
-            //si encuentra uno lo retorno
-            //Si esta mas veces en el archivo ... seguir recorriendo buscando mas ciclos,
-            //donde en genero es el incio y fin ???
-        }else{
-            return respuesta;
-        }
-    }
-
-    DFS(Grafo G)
-        por cada vertice en G
-            V.color = blanco
-        Por cada V en G
-            si v.color = blanco
-                DFS_VISIT(blanco)
-   DFS_VISIT(Vertice v)
-        v.color = amarillo
-        por cada A de V
-            if (color = blanco)
-                DFS_VISIT(ady)
-            if color = amarillo
-                ciclo
-        v.color negro
-
-
-    */
-
     public GrafoGeneros buscarCiclos(String genero){
         if (!this.generos.containsKey(genero)) return null;
         for (String keyGenero: this.generos.keySet()) {
             colores.put(keyGenero, "blanco");
         }
         GrafoGeneros ciclo = new GrafoGeneros();
-//        colores.replace(genero, "amarillo");
-//        for (Genero g: this.generos.get(genero)) {
-//            if (colores.get(g.getNombre()).equals("blanco")) {
-//                caminoParcial.addAll(buscarCiclos_visit(g, colores, caminoParcial));
-//            }
-//        }
         origen = new Genero(genero, 0);
         buscarCiclos_visit(origen, ciclo);
+        for (String g: ciclo.generos.keySet()) {
+            ArrayList<Genero> ady = generos.get(g);
+            for (Genero a: ady){
+                if (ciclo.contieneVertice(a.getNombre())){
+                    ciclo.agregarArco(g, a.getNombre());
+                    ciclo.setArco(g, a);
+                }
+            }
+        }
         return ciclo;
     }
 
@@ -165,11 +134,9 @@ public class GrafoGeneros {
             } else if (colores.get(ady.getNombre()).equals("amarillo") && ady.getNombre().equals(origen.getNombre())){
                 caminoParcial.add(ady);
                 if (!ciclo.contieneVertice(ady.getNombre())){
-                    ciclo.addVertice(g.getNombre());
+                    //ciclo.addVertice(g.getNombre());
                     for (Genero act: caminoParcial) {
-                        //ciclo.addVertice(act.getNombre());
-                        ciclo.agregarArco(g.getNombre(), act.getNombre());
-                        ciclo.setArco(g.getNombre(), act);
+                        ciclo.addVertice(act.getNombre());
                     }
 
                 }
