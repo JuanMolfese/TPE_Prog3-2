@@ -7,8 +7,14 @@ public class GrafoGeneros {
 
     private HashMap<String, ArrayList<Genero>> generos;
 
+    private HashMap<String, String> colores;
+    private ArrayList<Genero> caminoParcial;
+    private Genero origen;
+
     public GrafoGeneros() {
         generos = new HashMap<>();
+        colores = new HashMap<>();
+        caminoParcial = new ArrayList<>();
     }
 
     public void addVertice(String nombre){
@@ -135,45 +141,42 @@ public class GrafoGeneros {
 
     public GrafoGeneros buscarCiclos(String genero){
         if (!this.generos.containsKey(genero)) return null;
-        GrafoGeneros ciclo = new GrafoGeneros();
-        HashMap<String, String> colores = new HashMap<>();
-        HashMap<Genero, Genero> padres = new HashMap<>();
-        Genero fin = null;
         for (String keyGenero: this.generos.keySet()) {
             colores.put(keyGenero, "blanco");
         }
-        colores.replace(genero, "amarillo");
-        for (Genero g: this.generos.get(genero)) {
-            if (colores.get(g.getNombre()).equals("blanco")) {
-                //caminoParcial.addAll(buscarCiclos_visit(g, colores, caminoParcial));
-                padres.put(g, new Genero(genero, 0));
-                fin = buscarCiclos_visit(g, colores, padres);
-            }
-        }
-        if (fin != null) {
-            ciclo.addVertice(genero);
-            for (Genero g: padres.keySet()) {
-                ciclo.agregarArco(genero, g.getNombre());
-                ciclo.setArco(genero, g);
-            }
-        }
+        GrafoGeneros ciclo = new GrafoGeneros();
+//        colores.replace(genero, "amarillo");
+//        for (Genero g: this.generos.get(genero)) {
+//            if (colores.get(g.getNombre()).equals("blanco")) {
+//                caminoParcial.addAll(buscarCiclos_visit(g, colores, caminoParcial));
+//            }
+//        }
+        origen = new Genero(genero, 0);
+        buscarCiclos_visit(origen, ciclo);
         return ciclo;
     }
 
-    private Genero buscarCiclos_visit(Genero g, HashMap<String, String> colores, HashMap<Genero,Genero> padres){
+    private void buscarCiclos_visit(Genero g, GrafoGeneros ciclo){
         colores.replace(g.getNombre(), "amarillo");
+        caminoParcial.add(g);
         for (Genero ady: this.generos.get(g.getNombre())) {
-            padres.put(ady, g);
-            if (colores.get(ady.getNombre()).equals("blanco")){
-                Genero ultimo = buscarCiclos_visit(ady, colores, padres);
-                if (ultimo != null){
-                    return ultimo;
-                } else if (colores.get(ady.getNombre()).equals("amarillo")){
-                    return ady;
+            if (colores.get(ady.getNombre()).equals("blanco")) {
+                buscarCiclos_visit(ady, ciclo);
+            } else if (colores.get(ady.getNombre()).equals("amarillo") && ady.getNombre().equals(origen.getNombre())){
+                caminoParcial.add(ady);
+                if (!ciclo.contieneVertice(ady.getNombre())){
+                    ciclo.addVertice(g.getNombre());
+                    for (Genero act: caminoParcial) {
+                        //ciclo.addVertice(act.getNombre());
+                        ciclo.agregarArco(g.getNombre(), act.getNombre());
+                        ciclo.setArco(g.getNombre(), act);
+                    }
+
                 }
             }
         }
-        return null;
+        colores.replace(g.getNombre(), "negro");
+        caminoParcial.remove(g);
     }
 
     public ArrayList<String> caminoMayorPeso(String genero){
