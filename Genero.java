@@ -24,9 +24,17 @@ public class Genero implements Comparable<Genero> {
         this.valorBusqueda = valorBusqueda + 1;
     }
 
+    public void setValorBusqueda(Integer valorBusqueda) {
+        this.valorBusqueda = valorBusqueda;
+    }
 
     @Override
     public int compareTo(Genero g) {
         return g.valorBusqueda.compareTo(this.valorBusqueda);
+    }
+
+    @Override
+    public String toString() {
+        return this.getNombre();
     }
 }

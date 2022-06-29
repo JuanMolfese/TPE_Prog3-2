@@ -40,6 +40,15 @@ public class GrafoGeneros {
       //  }
     }
 
+    public void setArco(String nombreOrigen, Genero destino) {
+        int indice = 0;
+        //if(generos.containsKey(nombreOrigen) && generos.containsKey(nombreDestino)){
+        indice= existeArco(nombreOrigen, destino.getNombre());
+        if (indice != -1){
+            generos.get(nombreOrigen).get(indice).setValorBusqueda(destino.getValorBusqueda());
+        }
+    }
+
     public boolean contieneVertice(String nombre) {
         if(! generos.isEmpty())
             return generos.containsKey(nombre);
@@ -105,13 +114,75 @@ public class GrafoGeneros {
             return respuesta;
         }
     }
+
+    DFS(Grafo G)
+        por cada vertice en G
+            V.color = blanco
+        Por cada V en G
+            si v.color = blanco
+                DFS_VISIT(blanco)
+   DFS_VISIT(Vertice v)
+        v.color = amarillo
+        por cada A de V
+            if (color = blanco)
+                DFS_VISIT(ady)
+            if color = amarillo
+                ciclo
+        v.color negro
+
+
     */
+
+    public GrafoGeneros buscarCiclos(String genero){
+        if (!this.generos.containsKey(genero)) return null;
+        GrafoGeneros ciclo = new GrafoGeneros();
+        HashMap<String, String> colores = new HashMap<>();
+        ArrayList<Genero> caminoParcial = new ArrayList<>();
+        for (String keyGenero: this.generos.keySet()) {
+            colores.put(keyGenero, "blanco");
+        }
+        colores.replace(genero, "amarillo");
+        for (Genero g: this.generos.get(genero)) {
+            if (colores.get(g.getNombre()).equals("blanco")) {
+                caminoParcial.addAll(buscarCiclos_visit(g, colores, caminoParcial));
+            }
+        }
+        if (!caminoParcial.isEmpty()) {
+            ciclo.addVertice(genero);
+            for (Genero g: caminoParcial) {
+                ciclo.agregarArco(genero, g.getNombre());
+                ciclo.setArco(genero, g);
+            }
+        }
+        return ciclo;
+    }
+
+    private ArrayList<Genero> buscarCiclos_visit(Genero g, HashMap<String, String> colores, ArrayList<Genero> caminoParcial){
+        colores.replace(g.getNombre(), "amarillo");
+        caminoParcial.add(g);
+        boolean encontro = false;
+        int i = 0;
+        //se agrega
+        Genero ady;
+        while (!encontro && i < this.generos.get(g.getNombre()).size()) {
+            ady = this.generos.get(g.getNombre()).get(i);
+            i++;
+        //for (Genero ady: this.generos.get(g.getNombre())) {
+            if (colores.get(ady.getNombre()).equals("blanco")) {
+                caminoParcial.addAll(buscarCiclos_visit(ady, colores, caminoParcial));
+            } else if (colores.get(ady.getNombre()).equals("amarillo")){
+                encontro = true;
+            }
+        }
+        if (!encontro) caminoParcial.remove(g);
+        return caminoParcial;
+    }
+
     public ArrayList<String> caminoMayorPeso(String genero){
         ArrayList<String> solucion = new ArrayList<>();
         String tmp = genero;
         solucion.clear();
         solucion.add(tmp);
-        //while (G.Vértices – S) no es vacío: 	// loop principal
         while (!this.generos.get(tmp).isEmpty() && notNewAyacente(tmp, solucion)) {
             tmp = generoMayorPeso(this.generos.get(tmp)); // se queda con el genero de mayor peso
             solucion.add(tmp);
@@ -166,7 +237,7 @@ public class GrafoGeneros {
         for(String e : generos.keySet()){
           item += e;
           item += generos.get(e).toString();
-          item += " // ";
+          item += " \n ";
         }
         return item;
     }

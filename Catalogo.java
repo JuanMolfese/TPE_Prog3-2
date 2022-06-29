@@ -108,14 +108,14 @@ public class Catalogo {
         return respuesta;
     }
 
-    /*
+
     //TODO
     public GrafoGeneros getCicloGenero(String genero){
        // if(this.grafo_generos.contieneCiclo()) {//Para no crear un hasmap sin antes saber si al menos hay un ciclo en el grafo
        GrafoGeneros grafoConCiclo = new GrafoGeneros();
        return grafoConCiclo = grafo_generos.buscarCiclos(genero);
     }
-    */
+
 
     public ArrayList<String> caminoMayorPeso(String genero){
         return this.grafo_generos.caminoMayorPeso(genero);
