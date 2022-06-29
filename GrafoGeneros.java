@@ -137,19 +137,22 @@ public class GrafoGeneros {
         if (!this.generos.containsKey(genero)) return null;
         GrafoGeneros ciclo = new GrafoGeneros();
         HashMap<String, String> colores = new HashMap<>();
-        ArrayList<Genero> caminoParcial = new ArrayList<>();
+        HashMap<Genero, Genero> padres = new HashMap<>();
+        Genero fin = null;
         for (String keyGenero: this.generos.keySet()) {
             colores.put(keyGenero, "blanco");
         }
         colores.replace(genero, "amarillo");
         for (Genero g: this.generos.get(genero)) {
             if (colores.get(g.getNombre()).equals("blanco")) {
-                caminoParcial.addAll(buscarCiclos_visit(g, colores, caminoParcial));
+                //caminoParcial.addAll(buscarCiclos_visit(g, colores, caminoParcial));
+                padres.put(g, new Genero(genero, 0));
+                fin = buscarCiclos_visit(g, colores, padres);
             }
         }
-        if (!caminoParcial.isEmpty()) {
+        if (fin != null) {
             ciclo.addVertice(genero);
-            for (Genero g: caminoParcial) {
+            for (Genero g: padres.keySet()) {
                 ciclo.agregarArco(genero, g.getNombre());
                 ciclo.setArco(genero, g);
             }
@@ -157,25 +160,20 @@ public class GrafoGeneros {
         return ciclo;
     }
 
-    private ArrayList<Genero> buscarCiclos_visit(Genero g, HashMap<String, String> colores, ArrayList<Genero> caminoParcial){
+    private Genero buscarCiclos_visit(Genero g, HashMap<String, String> colores, HashMap<Genero,Genero> padres){
         colores.replace(g.getNombre(), "amarillo");
-        caminoParcial.add(g);
-        boolean encontro = false;
-        int i = 0;
-        //se agrega
-        Genero ady;
-        while (!encontro && i < this.generos.get(g.getNombre()).size()) {
-            ady = this.generos.get(g.getNombre()).get(i);
-            i++;
-        //for (Genero ady: this.generos.get(g.getNombre())) {
-            if (colores.get(ady.getNombre()).equals("blanco")) {
-                caminoParcial.addAll(buscarCiclos_visit(ady, colores, caminoParcial));
-            } else if (colores.get(ady.getNombre()).equals("amarillo")){
-                encontro = true;
+        for (Genero ady: this.generos.get(g.getNombre())) {
+            padres.put(ady, g);
+            if (colores.get(ady.getNombre()).equals("blanco")){
+                Genero ultimo = buscarCiclos_visit(ady, colores, padres);
+                if (ultimo != null){
+                    return ultimo;
+                } else if (colores.get(ady.getNombre()).equals("amarillo")){
+                    return ady;
+                }
             }
         }
-        if (!encontro) caminoParcial.remove(g);
-        return caminoParcial;
+        return null;
     }
 
     public ArrayList<String> caminoMayorPeso(String genero){
