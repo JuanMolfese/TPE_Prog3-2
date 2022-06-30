@@ -3,13 +3,16 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         Catalogo catalogo = new Catalogo();
+        //Timer t = new Timer();
+        //t.start();
         catalogo.obtenerDatos();
         //System.out.println(catalogo);
-        //System.out.println(catalogo.getMasBuscado( "viajes", 2)); //Servicio 1
-        //System.out.println(catalogo.getBuscados("tecnología")); // Servicio 2
-       // System.out.println(catalogo.caminoMayorPeso("filosofia"));
-        GrafoGeneros grafo = catalogo.getCicloGenero("poesia"); // Servicio 3
+        //System.out.println(catalogo.getMasBuscado( "cine", 4)); //Servicio 1
+        //System.out.println(catalogo.caminoMayorPeso("cine"));
+        GrafoGeneros grafo = catalogo.getCicloGenero("viajes"); // Servicio 3
         System.out.println(grafo);
+        //System.out.println("Tiempo de demora: " + t.stop());
+        System.out.println(catalogo.getCantidad_iteraciones());
     }
 }
 

@@ -8,11 +8,16 @@ import java.util.Iterator;
 public class Catalogo {
 
     private GrafoGeneros grafo_generos;
+    private int cantidad_iteraciones;
 
     public Catalogo(){
         this.grafo_generos = new GrafoGeneros();
+        this.cantidad_iteraciones = 0;
     }
 
+    public int getCantidad_iteraciones(){
+        return this.cantidad_iteraciones;
+    }
      /**
      * Genera un grafo de generos extraidos de un archivo
      * .csv donde cada vertice tiene el nombre del genero y
@@ -48,40 +53,6 @@ public class Catalogo {
         }
     }
 
-    /**
-     * Dado un arreglo de string recibido por parametro
-     * genera un archivo .cvs donde cada linea de este
-     * es un item del arreglo
-     * */
-    private void generarSalida(ArrayList<String> titulosLibros) {
-        BufferedWriter bw = null;
-        try {
-            File file = new File("dataset/salida1.csv");
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            FileWriter fw = new FileWriter(file);
-            bw = new BufferedWriter(fw);
-
-            for(String s : titulosLibros){
-                String contenidoLinea = s;
-                bw.write(contenidoLinea);
-                bw.newLine();
-            }
-
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } finally {
-            try {
-                if (bw != null)
-                    bw.close();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
     public ArrayList<String> getMasBuscado(String genero, int cant){
         ArrayList<Genero> tmp = new ArrayList<>();
         ArrayList<String> respuesta = new ArrayList<>();
@@ -91,7 +62,9 @@ public class Catalogo {
         for (int i = 0; i< cant; i++){
             if(tmp.size()>i) {
                 respuesta.add(tmp.get(i).getNombre());
+                cantidad_iteraciones++;
             }else{
+                cantidad_iteraciones++;
                 return respuesta;
             }
         }
@@ -112,13 +85,19 @@ public class Catalogo {
     //TODO
     public GrafoGeneros getCicloGenero(String genero){
        // if(this.grafo_generos.contieneCiclo()) {//Para no crear un hasmap sin antes saber si al menos hay un ciclo en el grafo
-       GrafoGeneros grafoConCiclo = new GrafoGeneros();
-       return grafoConCiclo = grafo_generos.buscarCiclos(genero);
+        cantidad_iteraciones = 0;
+        GrafoGeneros grafoConCiclo = new GrafoGeneros();
+        grafoConCiclo = grafo_generos.buscarCiclos(genero);
+        cantidad_iteraciones = grafo_generos.getIteraciones();
+        return grafoConCiclo;
     }
 
 
     public ArrayList<String> caminoMayorPeso(String genero){
-        return this.grafo_generos.caminoMayorPeso(genero);
+        cantidad_iteraciones = 0;
+        ArrayList<String> camino = this.grafo_generos.caminoMayorPeso(genero);
+        cantidad_iteraciones = this.grafo_generos.getIteraciones();
+        return camino;
     }
 
 

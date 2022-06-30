@@ -9,12 +9,20 @@ public class GrafoGeneros {
 
     private HashMap<String, String> colores;
     private ArrayList<Genero> caminoParcial;
+    private ArrayList<String> solucion;
     private Genero origen;
+    private int iteraciones;
 
     public GrafoGeneros() {
         generos = new HashMap<>();
         colores = new HashMap<>();
         caminoParcial = new ArrayList<>();
+        solucion = new ArrayList<>();
+        iteraciones = 0;
+    }
+
+    public int getIteraciones() {
+        return iteraciones;
     }
 
     public void addVertice(String nombre){
@@ -106,6 +114,7 @@ public class GrafoGeneros {
     }
 
     public GrafoGeneros buscarCiclos(String genero){
+        this.iteraciones = 0;
         if (!this.generos.containsKey(genero)) return null;
         for (String keyGenero: this.generos.keySet()) {
             colores.put(keyGenero, "blanco");
@@ -130,6 +139,7 @@ public class GrafoGeneros {
         caminoParcial.add(g);
         for (Genero ady: this.generos.get(g.getNombre())) {
             if (colores.get(ady.getNombre()).equals("blanco")) {
+                iteraciones++;
                 buscarCiclos_visit(ady, ciclo);
             } else if (colores.get(ady.getNombre()).equals("amarillo") && ady.getNombre().equals(origen.getNombre())){
                 caminoParcial.add(ady);
@@ -147,18 +157,20 @@ public class GrafoGeneros {
     }
 
     public ArrayList<String> caminoMayorPeso(String genero){
-        ArrayList<String> solucion = new ArrayList<>();
+        //ArrayList<String> solucion = new ArrayList<>();
+        iteraciones = 0;
         String tmp = genero;
         solucion.clear();
         solucion.add(tmp);
-        while (!this.generos.get(tmp).isEmpty() && notNewAyacente(tmp, solucion)) {
+        while (!this.generos.get(tmp).isEmpty() && notNewAyacente(tmp) && tmp != null) {
             tmp = generoMayorPeso(this.generos.get(tmp)); // se queda con el genero de mayor peso
             solucion.add(tmp);
+            iteraciones++;
         }
         return solucion;
     }
 
-    private boolean notNewAyacente (String genero, ArrayList<String> solucion){
+    private boolean notNewAyacente (String genero){
         for (Genero g: this.generos.get(genero)) {
             if (!solucion.contains(g.getNombre())){
                 return true;
@@ -170,10 +182,14 @@ public class GrafoGeneros {
     private String generoMayorPeso(ArrayList<Genero> adyacentes){
         Genero g = new Genero("tmp",0);
         for (Genero i: adyacentes) {
-            if (g.getValorBusqueda() < i.getValorBusqueda()){
-                g = i;
+            if (!solucion.contains(i.getNombre())) {
+                if (g.getValorBusqueda() < i.getValorBusqueda()) {
+                    g = i;
+                    iteraciones++;
+                }
             }
         }
+        if (g.getNombre().equals("tmp")) return null;
         return g.getNombre();
     }
 
