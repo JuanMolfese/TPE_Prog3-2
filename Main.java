@@ -7,10 +7,10 @@ public class Main {
         //t.start();
         catalogo.obtenerDatos();
         //System.out.println(catalogo);
-        //System.out.println(catalogo.getMasBuscado( "cine", 4)); //Servicio 1
+        System.out.println(catalogo.getMasBuscado( "cine", 4)); //Servicio 1
         //System.out.println(catalogo.caminoMayorPeso("cine"));
-        GrafoGeneros grafo = catalogo.getCicloGenero("viajes"); // Servicio 3
-        System.out.println(grafo);
+        //GrafoGeneros grafo = catalogo.getCicloGenero("viajes"); // Servicio 3
+        //System.out.println(grafo);
         //System.out.println("Tiempo de demora: " + t.stop());
         System.out.println(catalogo.getCantidad_iteraciones());
     }

@@ -31,16 +31,6 @@ public class GrafoGeneros {
         }
     }
 
-    public void borrarVertice(String nombre) {
-        for(String i : generos.keySet()){
-            for(int j=0 ; j< generos.get(i).size(); j++){
-                if(generos.get(i).get(j).getNombre() == nombre)
-                    generos.get(i).remove(j);
-            }
-        }
-        generos.remove(nombre);
-    }
-
     //Se implementa existe arco con una modificacion, donde retorna (en caso de existir) la posicion del elemento.
     public void agregarArco(String nombreOrigen, String nombreDestino) {
         int indice = 0;
@@ -77,32 +67,6 @@ public class GrafoGeneros {
             }
             return -1;
         } else return -1;
-    }
-
-    public int cantidadVertices() {
-        return this.generos.size();
-    }
-
-    public int cantidadArcos() {
-        int contador = 0;
-        for (String i : generos.keySet()) {
-            contador += generos.get(i).size();
-        }
-        return contador;
-    }
-
-    public Iterator<String> obtenerVertices() {
-        Iterator<String> it = generos.keySet().iterator();
-        return it;
-    }
-
-    public Iterator<Genero> itobtenerAdyacentes(String nombre) {
-        ArrayList<Genero>lista_ady = new ArrayList<>();
-        for (int i = 0; i < generos.get(nombre).size(); i++) {
-            lista_ady.add(generos.get(nombre).get(i));
-        }
-        Iterator<Genero> it = lista_ady.iterator();
-        return it;
     }
 
     public ArrayList<Genero> obtenerAdyacentes(String nombre) {
@@ -192,28 +156,6 @@ public class GrafoGeneros {
         if (g.getNombre().equals("tmp")) return null;
         return g.getNombre();
     }
-
-
-
-//   public Iterator<Arco<T>> obtenerArcos() {
-//        ArrayList<Arco<T>> lista_arcos = new ArrayList<>();
-//        for (int i : grafo.keySet()) {
-//            for(int j=0; j < grafo.get(i).size(); j++)
-//                lista_arcos.add(grafo.get(i).get(j));
-//        }
-//        Iterator<Arco<T>> it = lista_arcos.iterator();
-//        return it;
-//    }
-//
-//
-//    public Iterator<Arco<T>> obtenerArcos(int verticeId) {
-//        ArrayList<Arco<T>> lista_arcos = new ArrayList<>();
-//        for(int j=0; j < grafo.get(verticeId).size(); j++)
-//            lista_arcos.add(grafo.get(verticeId).get(j));
-//        Iterator<Arco<T>> it = lista_arcos.iterator();
-//        return it;
-//    }
-
 
     @Override
     public String toString() {

@@ -71,20 +71,8 @@ public class Catalogo {
         return respuesta;
     }
 
-    public ArrayList<String> getBuscados(String genero){
-        ArrayList<Genero> tmp = new ArrayList<>();
-        ArrayList<String> respuesta = new ArrayList<>();
-        tmp = this.grafo_generos.obtenerAdyacentes(genero);
-        for (int i = 0; i < tmp.size() ; i++){
-            respuesta.add(tmp.get(i).getNombre());
-        }
-        return respuesta;
-    }
-
-
-    //TODO
     public GrafoGeneros getCicloGenero(String genero){
-       // if(this.grafo_generos.contieneCiclo()) {//Para no crear un hasmap sin antes saber si al menos hay un ciclo en el grafo
+
         cantidad_iteraciones = 0;
         GrafoGeneros grafoConCiclo = new GrafoGeneros();
         grafoConCiclo = grafo_generos.buscarCiclos(genero);
